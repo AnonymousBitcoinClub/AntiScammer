@@ -35,7 +35,8 @@ async def on_message(message):
         return
 
     content = message.content.lower()
-    await log_action(f'Checking: {content}')
+    if len(content) > 1:
+        await log_action(f'Checking: {content}')
     for banned_string in banned_strings:
         if banned_string in content:
             await log_action(f'Bot Triggered: {banned_string}')
