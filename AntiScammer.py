@@ -8,6 +8,7 @@ from vars import TOKEN, ADMIN_MOD_IDS, LOGS_CHANNEL_ID, YOUR_GUILD_ID
 BANNED_STRINGS_FILE = 'banned_strings.json'  # JSON file path
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 logs_channel = None
@@ -34,8 +35,10 @@ async def on_message(message):
         return
 
     content = message.content.lower()
+    await log_action(f'Checking: {content}')
     for banned_string in banned_strings:
         if banned_string in content:
+            await log_action(f'Bot Triggered: {banned_string}')
             await message.delete()
             await message.channel.send(f'{message.author.mention}, your message was deleted because it contained potential scam.')
             await log_action(f'Message deleted: {message.content} (Author: {message.author})')
