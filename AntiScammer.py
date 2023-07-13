@@ -74,11 +74,12 @@ async def on_message(message):
                 break
 
     # Check for allowed links
-    if any(link in content for link in allowed_links):
-        await bot.process_commands(message)
-    else:
-        await message.reply(f'{message.author.mention}, only specific links are allowed.')
-        await message.delete()
+    if "http" in content:
+        if any(link in content for link in allowed_links):
+            await bot.process_commands(message)
+        else:
+            await message.reply(f'{message.author.mention}, only specific links are allowed.')
+            await message.delete()
 
 @bot.event
 async def on_member_join(member):
